@@ -7,56 +7,82 @@ using namespace std;
 
 int ans = 0;
 
-int right(vector<int> arr, int start, int radius, int cnt)
+int right(const vector<int>& arr, int start, int radius, int cnt)
 {
-    if (start >= arr.size()) {
-        return cnt;
-    }
-    for (int i = 1; i <= radius && start + i < arr.size(); ++i) {
-        if (arr[start] + i >= arr[start + i])
+    int initPos = start;
+    for (int i = initPos + 1; i < arr.size(); ++i)
+    {
+        if (arr[initPos] + radius >= arr[i])
         {
+            start = i;
             cnt++;
         }
     }
-    return right(arr, start + radius, radius + 1, cnt);
+    if (initPos == start)
+        return cnt;
+    return right(arr, start, radius + 1, cnt);
 }
 
-int left(vector<int> arr, int start, int radius, int cnt)
+int left(const vector<int>& arr, int start, int radius, int cnt)
 {
-    if (start < 0) {
-        return cnt;
-    }
-    for (int i = 1; i <= radius && start - i >= 0; ++i) {
-        if (arr[start] - i <= arr[start - i])
+    int initPos = start;
+    for (int i = initPos - 1; i >= 0; --i)
+    {
+        if (arr[initPos] - radius <= arr[i])
         {
+            start = i;
             cnt++;
         }
     }
-    return right(arr, start - radius, radius + 1, cnt);
+    if (initPos == start)
+        return cnt;
+    return left(arr, start, radius + 1, cnt);
 }
 
-void solve(vector<int> arr, int start, int radius, int cnt)
+void solve(const vector<int>& arr, int start, int radius)
 {
     if (start == arr.size())
         return;
-    int l = 0, r = 0;
-    if (start - radius >= 0 && arr[start] - radius <= arr[start - 1])
+    int l = 0, r = 0, rPos = start, lPos = start;
+    if (start - 1 >= 0)
     {
-        l = left(arr, start - radius, radius + 1, cnt++);
+        for (int i = start - 1; i >= 0; --i)
+        {
+            if (arr[start] - radius <= arr[i])
+            {
+                lPos = i;
+                l++;
+            }
+        }
+        if (lPos == start)
+            l = 0;
+        else
+            l = left(arr, lPos, radius + 1, l);
     }
-    if (start + radius < arr.size() && arr[start] + radius >= arr[start + 1])
+    if (start + 1 < arr.size())
     {
-        r = right(arr, start + radius, radius + 1, cnt++);
+        for (int i = start + 1; i < arr.size(); ++i)
+        {
+            if (arr[start] + radius >= arr[i])
+            {
+                rPos = i;
+                r++;
+            }
+        }
+        if (rPos == start)
+            r = 0;
+        else
+            r = right(arr, rPos, radius + 1, r);
     }
-    ans = max(ans, l + r);
-    solve(arr, start + 1, 1, 0);
+    ans = max(ans, l + r + 1);
+    solve(arr, start + 1, 1);
 }
 
 int main()
 {
     freopen("angry.in", "r", stdin);
     freopen("angry.out", "w", stdout);
-    
+
     int N;
     cin >> N;
 
@@ -64,7 +90,7 @@ int main()
     for (int i = 0; i < N; ++i)
         cin >> arr[i];
     sort(arr.begin(), arr.end());
-    solve(arr, 0, 1, 0);
+    solve(arr, 0, 1);
     cout << ans;
     return 0;
 }
