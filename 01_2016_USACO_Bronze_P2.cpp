@@ -1,7 +1,6 @@
-#include <iostream>
-#include <cmath>
-#include <vector>
-#include <algorithm>
+// Passed all test cases
+
+#include <bits/stdc++.h>
 
 using namespace std;
 
