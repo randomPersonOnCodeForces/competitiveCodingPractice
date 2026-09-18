@@ -1,3 +1,5 @@
+// Passed all test cases
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -24,7 +26,7 @@ void solve(const vector<vector<int>> &adj, int target) {
             solve(adj, target + 1);
             break;
         }
-        if (adj[target].size() > 0) {
+        if (i == adj.size() - 1) {
             cout << target;
             return;
         }
@@ -32,8 +34,8 @@ void solve(const vector<vector<int>> &adj, int target) {
 }
 
 int main() {
-    // freopen("factory.in", "r", stdin);
-    // freopen("factory.out", "w", stdout);
+    freopen("factory.in", "r", stdin);
+    freopen("factory.out", "w", stdout);
 
     int N;
     cin >> N;
