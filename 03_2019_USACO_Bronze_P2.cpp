@@ -1,49 +1,50 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<vector<int>> adj;
-
-vector<bool> dfs(vector<bool> &visited, int &curr) {
-    if (!visited[curr]) {
-        visited[curr] = true;
-        for (int i = 0; i < adj[curr].size(); ++i) {
-            if (!visited[adj[curr][i]]) {
-                dfs(visited, adj[curr][i]);
-            }
-        }
+vector<bool> dfs(const vector<vector<int>> &adj, vector<bool> &visited, int curr) {
+    visited[curr] = true;
+    if (adj[curr].size() > 0 && !visited[adj[curr][0]]) {
+        dfs(adj, visited, adj[curr][0]);
     }
     return visited;
 }
 
-int solve(int target) {
+void solve(const vector<vector<int>> &adj, int target) {
     if (target == adj.size()) {
-        return -1;
+        cout << -1;
+        return;
     }
-    for (int i = 0; i < adj.size(); ++i) {
+    for (int i = 1; i < adj.size(); ++i) {
         if (i == target) {
             continue;
         }
         vector<bool> visited(adj.size(), false);
-        vector<bool> flag = dfs(visited, i);
+        vector<bool> flag = dfs(adj, visited, i);
         if (!flag[target]) {
-            solve(target + 1);
+            solve(adj, target + 1);
             break;
         }
+        if (adj[target].size() > 0) {
+            cout << target;
+            return;
+        }
     }
-    return target;
 }
 
 int main() {
+    // freopen("factory.in", "r", stdin);
+    // freopen("factory.out", "w", stdout);
+
     int N;
     cin >> N;
     
-    adj.resize(N);
+    vector<vector<int>> adj(N + 1);
     for (int i = 0; i < N - 1; ++i) {
         int a, b;
         cin >> a >> b;
         adj.at(a).push_back(b);
     }
     
-    cout << solve(0);
+    solve(adj, 1);
     return 0;
 }
