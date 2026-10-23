@@ -1,33 +1,32 @@
-// Passed all test cases
-
 #include <bits/stdc++.h>
 using namespace std;
 
 int main() {
-    freopen("breedflip.in", "r", stdin);
-    freopen("breedflip.out", "w", stdout);
-
     int N;
     cin >> N;
-
-    string A;
-    cin >> A;
-
-    string B;
-    cin >> B;
-
-    int i = 0, ans = 0;
-    bool flag = false;
-    while (i < N) {
-        if (A[i] != B[i] && flag == false) {
-            ans++;
-            flag = true;
-        }
-        else if (flag == true && A[i] == B[i]) {
-            flag = false;
-        }
-        i++;
+    unordered_map<int, int> order;
+    vector<int> arr(N, 0);
+    for (int i = 0; i < N; ++i) {
+        int key;
+        cin >> key;
+        order[key] = i;
     }
-    cout << ans;
+    for (int i = 0; i < N; ++i) {
+        int key;
+        cin >> key;
+        arr[i] = order[key];
+    }
+
+    
     return 0;
 }
+
+/*
+
+5
+1 2 3 4 5
+3 1 2 4 5
+
+1 2 3 4 5
+
+*/
